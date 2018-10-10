@@ -1,18 +1,36 @@
 <template>
   <div id="app">
-      Hello World!
+      {{quote}}
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'app',
-  data () {
-    return {
-     
+    data () {
+      return {
+        quote: ''
+      };
+    },
+    created: function() {
+      this.quote ='Loading...';
+      this.loadQuotes();
+    },
+    methods: {
+      loadQuotes: function(){
+          var vm = this;
+          axios.get('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
+          .then(function(response) {
+             vm.quote=response.data[0]; 
+          }).catch(function(error){
+             vm.quote='An error occured: ' + error;
+          });
+      }
     }
   }
-}
+
 </script>
 
 <style>
